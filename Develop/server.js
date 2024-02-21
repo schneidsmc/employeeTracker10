@@ -12,9 +12,7 @@ app.use(express.json());
 const db = mysql.createConnection(
     {
       host: 'localhost',
-      // MySQL username,
       user: 'root',
-      // TODO: Add MySQL password here
       password: 'Root',
       database: 'CMS_db'
     })
@@ -31,7 +29,7 @@ const db = mysql.createConnection(
       console.log("*        EMPLOYEE MANAGER         *")
       console.log("*                                 *")
       console.log("***********************************")
-      // promptUser();
+      promptUser();
     };
   // view all employees
   // view all departments
@@ -46,61 +44,55 @@ const db = mysql.createConnection(
   // **View salary budget SUM of Salaries
 
   
-// const promptUser = async () => {
-//   try{
-//     let answer = await inquirer.prompt({
-//       name: 'action',
-//       type: 'list',
-//       message: 'What would you like to do?',
-//       choices:  [
-//         'View ALL Employees',
-//         'View ALL Departments',
-//         'View ALL Roles',
-//         'Add Department',
-//         'Add Role',
-//         'Add Employee',
-//         'Update Employee Role',
-//         'Exit'
-//       ]
-//     });
-//     switch (answer.action) {
-//       case 'View ALL Employees':
-//         employeeView();
-//         break;
-
-//       case 'View ALL Departments':
-//         departmentView();
-//         break;
-
-//       case 'View ALL Roles':
-//         roleView();
-//         break;
-
-//       case 'Add Department':
-//         departmentAdd();
-//         break;
-
-//       case 'Add Role':
-//         roleAdd();
-//         break;
-
-//       case 'Add Employee':
-//         employeeAdd();
-//         break;
-
-//       case 'Update Employee Role':
-//         employeeUpdate();
-//         break;
-
-//       case 'Exit':
-//         connection.end();
-//         break;
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     promptUser();
-//   }
-// };
+const promptUser = async () => {
+  try{
+    let answer = await inquirer.prompt({
+      name: 'action',
+      type: 'list',
+      message: 'What would you like to do?',
+      choices:  [
+        'View ALL Employees',
+        'View ALL Departments',
+        'View ALL Roles',
+        'Add Department',
+        'Add Role',
+        'Add Employee',
+        'Update Employee Role',
+        'Exit'
+      ]
+    })
+    .then((answers) => {
+      const {choices} = answers;
+      if (choices === 'View ALL Employees') {
+        employeeView();
+      }
+      if (choices === 'View ALL Departments') {
+        departmentView();
+      }  
+      if (choices === 'View ALL Roles') {
+        roleView();
+      }   
+      if (choices === 'Add Department') {
+        departmentAdd();
+      }   
+      if (choices === 'Add Role') {
+        roleAdd();
+      } 
+      if (choices === 'Add Employee') {
+        employeeAdd();
+      }
+      if (choices === 'Update Employee Role') {
+        employeeUpdate();
+      }
+      if (choices === 'Exit') {
+        connection.end();
+      }
+    })
+  } catch (err) {
+    console.log(err);
+    promptUser();
+  }
+};
 
 // employeeView();
 // departmentView();
