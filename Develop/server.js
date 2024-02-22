@@ -4,6 +4,7 @@ const mysql = require('mysql2')
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
+const inquirer = require('inquirer');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -29,7 +30,10 @@ const db = mysql.createConnection(
       console.log("*        EMPLOYEE MANAGER         *")
       console.log("*                                 *")
       console.log("***********************************")
-      promptUser();
+      // promptUser();
+      
+
+     roleAdd();
     };
   // view all employees
   // view all departments
@@ -95,9 +99,151 @@ const promptUser = async () => {
 };
 
 // employeeView();
+employeeView = async () => {
+  console.log('Showing all employees ...\n');
+  const sql = `SELECT employee.id,
+                employee.first_name,
+                employee.last_name,
+                roles.title,
+                department.department_name AS department,
+                roles.salary
+            FROM employee
+                LEFT JOIN roles ON employee.role_id = roles.id
+                LEFT JOIN department ON roles.department_id = department.id`;
+  try {
+    const [rows, fields] = await db.promise().query(sql);
+    console.table(rows);
+  } catch (error) {
+    console.error('Error fetching employees', error)
+  }
+    // promptUser();
+  
+}
 // departmentView();
+departmentView = async () => {
+  console.log('Showing all departments ...\n');
+  const sql = `SELECT department.id AS id, department.department_name AS department FROM department`;
+  try {
+    const [rows, fields] = await db.promise().query(sql);
+    console.table(rows);
+  } catch (error) {
+    console.error('Error fetching departments', error)
+  }
+    // promptUser();
+}
+
 // roleView();
+roleView = async () => {
+  console.log('Showing all roles ...\n');
+  const sql = `SELECT roles.id AS id, roles.title AS Role FROM roles`;
+  try {
+    const [rows, fields] = await db.promise().query(sql);
+    console.table(rows);
+  } catch (error) {
+    console.error('Error fetching roles', error)
+  }
+    // promptUser();
+}
+
 // departmentAdd();
+
+departmentAdd = async () => {
+  try {
+    const answer = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'addDept',
+        message: 'What department would you like to add?',
+        validate: addDept => {
+          if (addDept) {
+            return true;
+          } else {
+            console.log('Please enter a department.');
+            return false;
+          }
+        }
+      }
+    ])
+  
+  const sql = `INSERT INTO department (department_name)
+                VALUES (?)`;
+  await db.promise().query(sql, answer.addDept);
+  console.log(`Added ${answer.addDept} to departments!`);
+
+  await departmentView();
+} catch (error) {
+console.log(`Error adding to departments`, error);
+}
+};
+
+
+
+
 // roleAdd();
+
+roleAdd = async () => {
+  try {
+    const answer = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'addRole',
+        message: 'What role would you like to add?',
+        validate: addRole => {
+          if (addRole) {
+            return true;
+          } else {
+            console.log('Please enter a role.');
+            return false;
+          }
+        }
+      },
+        
+        {
+        type: 'input',
+        name: 'addSalary',
+        message: 'What is the salary for this role?',
+        validate: addSalary => {
+          if (addSalary) {
+            return true;
+          } else {
+            console.log('PLease enter a salary.');
+            return false;
+          }
+        }
+      }
+    
+    ]);
+
+    const params = [answer.addRole, answer.addSalary];
+
+    const roleSQL = `SELECT department_name, id FROM department`;
+    const [data, fields] = await db.promise().query(roleSQL);
+    const dept = data.map(({department_name, id}) => ({name: department_name, value: id}));
+
+    const deptChoice = await inquirer.prompt([
+      {
+      type: 'list',
+      name: 'dept',
+      message: "What department is this role in?",
+      choices: dept
+      }
+    ]);
+
+    const selectedDept = deptChoice.dept;
+    params.push(selectedDept);
+
+  
+  const sql = `INSERT INTO roles (title, salary, department_id)
+                VALUES (?, ?, ?)`;
+  await db.promise().query(sql, params);
+  console.log(`Added ${answer.addRole} to roles!`);
+
+  await roleView();
+} catch (error) {
+console.log(`Error adding to roles`, error);
+}
+};
+
+
 // employeeAdd();
 // employeeUpdate();

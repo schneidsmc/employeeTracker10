@@ -1,6 +1,3 @@
-
-
-
 INSERT INTO department(department_name)
 VALUES ("Parks and Recreation"),
         ("Animal Control"),
