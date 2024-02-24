@@ -12,12 +12,12 @@ VALUES ("Deparment Manager", 100000, 1),
         ("Shoe-shiner", 50000, 3);
 
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Ron", "Swanson", 1, NULL),
-        ("Leslie", "Knope", 2, 1),
-        ("Donna", "Meagle", 3, 1),
-        ("Tom", "Haverford", 4, 2),
-        ("April", "Ludgate", 5, 2),
-        ("Andy", "Dwyer", 6, 2);
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Ron", "Swanson", 1),
+        ("Leslie", "Knope", 2),
+        ("Donna", "Meagle", 3),
+        ("Tom", "Haverford", 4),
+        ("April", "Ludgate", 5),
+        ("Andy", "Dwyer", 6);
 
 
