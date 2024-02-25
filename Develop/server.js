@@ -31,6 +31,7 @@ const db = mysql.createConnection(
       console.log("*                                 *")
       console.log("***********************************")
       promptUser();
+      // roleAdd();
     };
   // view all employees
   // view all departments
@@ -118,8 +119,7 @@ employeeView = async () => {
   } catch (error) {
     console.error('Error fetching employees', error)
   }
-    promptUser();
-  
+  promptUser();
 }
 // departmentView();
 departmentView = async () => {
@@ -131,7 +131,7 @@ departmentView = async () => {
   } catch (error) {
     console.error('Error fetching departments', error)
   }
-    promptUser();
+  promptUser();
 }
 
 // roleView();
@@ -144,7 +144,7 @@ roleView = async () => {
   } catch (error) {
     console.error('Error fetching roles', error)
   }
-    promptUser();
+  promptUser();
 }
 
 // departmentAdd();
@@ -165,7 +165,7 @@ departmentAdd = async () => {
           }
         }
       },
-      promptUser()
+    
     ])
   
   const sql = `INSERT INTO department (department_name)
@@ -227,7 +227,6 @@ roleAdd = async () => {
 
     const selectedDept = deptChoice.dept;
     params.push(selectedDept);
-
   const sql = `INSERT INTO roles (title, salary, department_id)
                 VALUES (?, ?, ?)`;
   await db.promise().query(sql, params);
@@ -236,7 +235,6 @@ roleAdd = async () => {
 } catch (error) {
 console.log(`Error adding to roles`, error);
 }
-promptUser();
 };
 
 
@@ -245,19 +243,6 @@ promptUser();
 employeeAdd = async () => {
   try {
     const answer = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'newR',
-        message: 'Is the new employee in an existing role?',
-        validate: nwRole => {
-          if (true) {
-            return true;
-          } else {
-            return false; 
-            addRole();
-          }
-        }
-      },
       {
         type: 'input',
         name: 'first_name',
@@ -287,9 +272,17 @@ employeeAdd = async () => {
     ]);
 
     const params = [answer.first_name, answer.last_name];
-    const roleSQL = `SELECT roles.department_id, roles.title FROM roles`;
+    const roleSQL = `SELECT roles.id, roles.title, roles.salary, department.department_name 
+                FROM roles
+                LEFT JOIN department ON roles.department_id = department.id`;
+
     const [data, fields] = await db.promise().query(roleSQL);
-    const rolesList = data.map(({id, title}) => ({name: title, value: id}));
+    const rolesList = data.map(({ id, title, salary, department_name }) => ({
+      name: `${title} (${department_name}) - ${salary}`,
+      value: { id, title, salary, department_name }
+    }));
+    
+    // const rolesList = data.map(({id, title}) => ({name: title, value: id}));
     const rolesChoice = await inquirer.prompt([
       {
       type: 'list',
@@ -299,10 +292,10 @@ employeeAdd = async () => {
       }
     ]);
 
-    const selectedRole = rolesChoice.rolesList;
-    params.push(selectedRole);
-
-  const sql = `INSERT INTO employee (first_name, Last_name, title)
+    const selectedRole = rolesChoice.roles;
+    params.push(selectedRole.id);
+console.log(params);
+  const sql = `INSERT INTO employee (first_name, Last_name, role_id)
                 VALUES (?, ?, ?)`;
   await db.promise().query(sql, params);
   console.log(`Added ${answer.first_name} ${answer.last_name}!`);
