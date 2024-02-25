@@ -17,9 +17,8 @@
 
 - What was your motivation? Why did you build this project? What problem does it solve? What did you learn?
 
-This project is built to hold information in database/s format. The information held concerns the employees information including name, role, manager, salary, title etc. The employee information is able to interact using mySQL tables.
+This project is built to hold information in database/s format. The information held concerns the employees information including name, role, salary, title etc. The employee information is able to interact using mySQL tables.
 
-This was created using .
 
 ## Table of Contents 
 
@@ -54,17 +53,26 @@ GIVEN a command-line application that accepts user input:
 
 - What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
 
-install
+This application will be installed by running the following command in the integrated terminal: `npm install`
+Once the dependencies are installed, you can log into mySql using the `mysql -u root -p` in the Develop terminal. Once you are logged into the terminal, the user needs to set up the database in mysql by running the two mysql files with these two commands from the Develop integrated terminal: `SOURCE db/schema.sql` and `SOURCE db/seeds.sql`. Running the schema will create the cms_db database. Running the seeds will create tables and insert data into those tables. 
+
+The user can then interact with the information once the database has been created, tables have been creates and data has been inserted. 
+
+Running `npm start` or `node server.js` will initiate the interaction with the data.
 
 ## Usage 🏁
 
 Provide instructions and examples for use.
 
-This
+This can be used to manage all the employee information. The user can view all the departments, roles and employees. They can also create a department and role as well as add a new employee to the database. The user can also update a current employees role.
 
-## License ✅ 
+## Demonstration ✅ 
 
-Open
+This is a screenshot of the mysql displaying all three tables and the data. 
+<img src="./Develop/mysqlTables.png" alt="mysqlTables" width="300" height="auto"> 
+
+Click [here]( ) for the youtube video demonstrating the various ways to interact with the database.
+
 
 ## Author 👋🏽
 

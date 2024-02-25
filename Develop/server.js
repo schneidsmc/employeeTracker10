@@ -2,9 +2,12 @@ const fs = require('fs')
 const path = require('path')
 const mysql = require('mysql2')
 const express = require('express');
+const chalk = require('chalk');
+// import chalk from 'chalk';
 const PORT = process.env.PORT || 3001;
 const app = express();
 const inquirer = require('inquirer');
+const err = chalk.bold.red;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -19,17 +22,19 @@ const db = mysql.createConnection(
     })
 
     db.connect(err =>{
+      
       if (err) throw err;
       console.log(`Connected to the CMS_db database.`);
       afterConnection()
     })
   
     afterConnection = () => {
-      console.log("***********************************")
-      console.log("*                                 *")
-      console.log("*        EMPLOYEE MANAGER         *")
-      console.log("*                                 *")
-      console.log("***********************************")
+      console.log(chalk.bgGreen.bold("*****************************"))
+      console.log(chalk.bgGreen.bold("*                           *"))
+      console.log(chalk.bgGreen.bold("*     EMPLOYEE MANAGER      *"))
+      console.log(chalk.bgGreen.bold("*                           *"))
+      console.log(chalk.bgGreen.bold("*****************************"))
+      
       promptUser();
     };
   // view all employees
@@ -92,11 +97,12 @@ const promptUser = async () => {
           if (err) {
             console.error('Error closing the database connection:', err);
           } else {
-            console.log('BYE!');
+            console.log(chalk.bgMagenta.bold('BYE!'));
           }
         });
     }
   } catch (err) {
+    
     console.error('Error:', err);
     // Handle errors appropriately, such as retrying the prompt
     promptUser();
@@ -105,7 +111,7 @@ const promptUser = async () => {
 
 // employeeView();
 employeeView = async () => {
-  console.log('Showing all employees ...\n');
+  console.log(chalk.bold.black.bgCyan('Showing all employees ...\n'));
   const sql = `SELECT employee.id,
                 employee.first_name,
                 employee.last_name,
@@ -125,7 +131,7 @@ employeeView = async () => {
 }
 // departmentView();
 departmentView = async () => {
-  console.log('Showing all departments ...\n');
+  console.log(chalk.bold.black.bgCyan('Showing all departments ...\n'));
   const sql = `SELECT department.id AS id, department.department_name AS department FROM department`;
   try {
     const [rows, fields] = await db.promise().query(sql);
@@ -138,7 +144,7 @@ departmentView = async () => {
 
 // roleView();
 roleView = async () => {
-  console.log('Showing all roles ...\n');
+  console.log(chalk.bold.black.bgCyan('Showing all roles ...\n'));
   const sql = `SELECT roles.id AS id, roles.title AS Role FROM roles`;
   try {
     const [rows, fields] = await db.promise().query(sql);
