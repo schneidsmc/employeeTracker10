@@ -1,16 +1,17 @@
 
 <h1 align="center">Employee Tracker </h1>
-<div>
+<div style= "text-align: center">
 
   <img src="https://img.shields.io/github/repo-size/schneidsmc/employeeTracker10" />
   <img src="https://img.shields.io/github/languages/top/schneidsmc/employeeTracker10" />
   <img src="https://img.shields.io/github/last-commit/schneidsmc/employeeTracker10" />
 <br />
   <img src="https://img.shields.io/badge/Javascript-yellow" />
-  <img src="https://img.shields.io/badge/jQuery-blue"  />
+  <img src="https://img.shields.io/badge/MySql-blue"  />
   <img src="https://img.shields.io/badge/-node.js-green" />
   <img src="https://img.shields.io/badge/-inquirer-red" >
-  <img src="https://img.shields.io/badge/-Markdown-lightgrey" />
+  <img src="https://img.shields.io/badge/-Express-lightgrey" />
+  <img src="https://img.shields.io/badge/-Chalk-pink" />
 </div>
 
 ## Description 📚
@@ -68,10 +69,13 @@ This can be used to manage all the employee information. The user can view all t
 
 ## Demonstration ✅ 
 
+Click [here]( ) for the youtube video demonstrating the various ways to interact with the database.
+
 This is a screenshot of the mysql displaying all three tables and the data. 
+
 <img src="./Develop/mysqlTables.png" alt="mysqlTables" width="300" height="auto"> 
 
-Click [here]( ) for the youtube video demonstrating the various ways to interact with the database.
+
 
 
 ## Author 👋🏽
