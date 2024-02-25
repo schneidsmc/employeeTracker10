@@ -31,7 +31,6 @@ const db = mysql.createConnection(
       console.log("*                                 *")
       console.log("***********************************")
       promptUser();
-      // roleAdd();
     };
   // view all employees
   // view all departments
@@ -86,13 +85,16 @@ const promptUser = async () => {
         await employeeAdd();
         break;
       case 'Update Employee Role':
-        await employeeUpdate();
+        await employeeUpdate();;
         break;
       case 'Exit':
-        connection.end();
-        break;
-      default:
-        console.log('Invalid action');
+        db.end((err) => {
+          if (err) {
+            console.error('Error closing the database connection:', err);
+          } else {
+            console.log('BYE!');
+          }
+        });
     }
   } catch (err) {
     console.error('Error:', err);
@@ -306,3 +308,111 @@ console.log(`Error adding employee`, error);
 };
 
 // employeeUpdate();
+
+employeeUpdate = async () => {
+  try {
+    // Get employees from employee table
+    const [employeeRows, employeeFields] = await db.promise().query("SELECT * FROM employee");
+    const employees = employeeRows.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+
+    // Prompt user to select an employee to update
+    const empChoice = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'name',
+        message: "Which employee would you like to update?",
+        choices: employees
+      }
+    ]);
+
+    const employeeId = empChoice.name;
+
+    // Get roles from roles table
+    const [roleRows, roleFields] = await db.promise().query("SELECT * FROM roles");
+    const roles = roleRows.map(({ id, title }) => ({ name: title, value: id }));
+
+    // Prompt user to select a new role for the employee
+    const roleChoice = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'role',
+        message: "What is the employee's new role?",
+        choices: roles
+      }
+    ]);
+
+    const roleId = roleChoice.role;
+
+    // Update employee role in the database
+    const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+    await db.promise().query(sql, [roleId, employeeId]);
+
+    console.log("Employee has been updated!");
+    await employeeView(); // Assuming employeeView() is an async function
+
+  } catch (error) {
+    console.error('Error updating employee:', error);
+  }
+};
+
+// employeeUpdate = () => {
+//   // get employees from employee table 
+//   const employeeSql = `SELECT * FROM employee`;
+
+//   db.promise().query(employeeSql, (err, data) => {
+//     if (err) throw err; 
+
+//   const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+//     inquirer.prompt([
+//       {
+//         type: 'list',
+//         name: 'name',
+//         message: "Which employee would you like to update?",
+//         choices: employees
+//       }
+//     ])
+//       .then(empChoice => {
+//         const employee = empChoice.name;
+//         const params = []; 
+//         params.push(employee);
+
+//         const roleSql = `SELECT * FROM roles`;
+
+//         db.promise().query(roleSql, (err, data) => {
+//           if (err) throw err; 
+
+//           const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+          
+//             inquirer.prompt([
+//               {
+//                 type: 'list',
+//                 name: 'role',
+//                 message: "What is the employee's new role?",
+//                 choices: roles
+//               }
+//             ])
+//                 .then(roleChoice => {
+//                 const role = roleChoice.role;
+//                 params.push(role); 
+                
+//                 let employee = params[0]
+//                 params[0] = role
+//                 params[1] = employee 
+                
+
+//                 // console.log(params)
+
+//                 const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
+//                 db.query(sql, params, (err, result) => {
+//                   if (err) throw err;
+//                 console.log("Employee has been updated!");
+              
+//                 employeeView();
+//           });
+//         });
+//       });
+//     });
+//   });
+// };
