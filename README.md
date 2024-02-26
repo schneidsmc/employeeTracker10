@@ -63,13 +63,13 @@ Running `npm start` or `node server.js` will initiate the interaction with the d
 
 ## Usage 🏁
 
-[Here](https://github.com/schneidsmc/employeeTracker10.git) is the link to my git hub repo. You can `git clone` this repository and use it on you rlocal machine. 
+[Here](https://github.com/schneidsmc/employeeTracker10.git) is the link to my git hub repo. You can `git clone` this repository and use it on your local machine. 
 
 This can be used to manage all the employee information. The user can view all the departments, roles and employees. They can also create a department and role as well as add a new employee to the database. The user can also update a current employees role.
 
 ## Demonstration ✅ 
 
-Click [here]( ) for the youtube video demonstrating the various ways to interact with the database.
+Click [here](https://youtu.be/FjGkeOzHRuA) for the youtube video demonstrating the various ways to interact with the database.
 
 Here is a screenshot of the mysql displaying all three tables and the data as well as a screenshot of how the tables look after intereacting. 
 

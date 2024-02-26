@@ -56,6 +56,7 @@ const promptUser = async () => {
       type: 'list',
       message: 'What would you like to do?',
       choices: [
+        'View Department Budget',
         'View ALL Employees',
         'View ALL Departments',
         'View ALL Roles',
@@ -63,7 +64,6 @@ const promptUser = async () => {
         'Add Role',
         'Add Employee',
         'Update Employee Role',
-        'View Department Budget',
         'Exit'
       ]
     });
@@ -360,7 +360,7 @@ employeeUpdate = async () => {
 };
 
 viewBudget = async () => {
-  console.log('Showing budget by department...\n');
+  console.log(chalk.bold.black.bgCyan('Showing budget by department...\n'));
 
   try {
     const sql = `SELECT department_id AS id, 
